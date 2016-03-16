@@ -7,6 +7,18 @@ define('lib/score/slides/ui/default', ['lib/score/oop', 'lib/bluebird', 'lib/css
     return oop.Class({
         __name__: 'DefaultSlidesUI',
 
+        __static__: {
+            CLASS_SLIDER: 'slider',
+            CLASS_FIRST_SLIDE: 'is-first',
+            CLASS_LAST_SLIDE: 'is-last',
+            CLASS_SLIDES: 'slides-container',
+            CLASS_SLIDE: 'slide',
+            CLASS_NEXT: 'slider__button--next',
+            CLASS_PREV: 'slider__button--previous',
+            TEXT_NEXT: 'next',
+            TEXT_PREV: 'prev'
+        },
+
         _currentLeft: 0,
 
         __init__: function(self, slider, config) {
@@ -14,15 +26,15 @@ define('lib/score/slides/ui/default', ['lib/score/oop', 'lib/bluebird', 'lib/css
             self.config = config;
             self.node = config.node;
             self.slideNodes = [];
-            css.addClass(self.node, 'slides is-first');
+            css.addClass(self.node, self.CLASS_SLIDER + ' ' + self.CLASS_FIRST_SLIDE);
             self.width = self.node.offsetWidth;
             self._initSlides();
             self._initNextButton();
             self._initPreviousButton();
             if (self.numSlides() <= 1) {
-                css.addClass(self.node, 'is-last');
+                css.addClass(self.node, self.CLASS_LAST_SLIDE);
             }
-            window.addEventListener('resize', self._windowResized);
+            window.addEventListener('resize', self._windowResizeHandler);
             if (isTouchDevice) {
                 self.slideWidth = self.node.offsetWidth;
             }
@@ -31,14 +43,14 @@ define('lib/score/slides/ui/default', ['lib/score/oop', 'lib/bluebird', 'lib/css
 
         transition: function(self, from, to, isForward) {
             if (self.slider.isFirstSlide()) {
-                css.addClass(self.node, 'is-first');
+                css.addClass(self.node, self.CLASS_FIRST_SLIDE);
             } else {
-                css.removeClass(self.node, 'is-first');
+                css.removeClass(self.node, self.CLASS_FIRST_SLIDE);
             }
             if (self.slider.isLastSlide()) {
-                css.addClass(self.node, 'is-last');
+                css.addClass(self.node, self.CLASS_LAST_SLIDE);
             } else {
-                css.removeClass(self.node, 'is-last');
+                css.removeClass(self.node, self.CLASS_LAST_SLIDE);
             }
             var left = -self.width * to;
             return new BPromise(function(resolve, reject) {
@@ -54,7 +66,7 @@ define('lib/score/slides/ui/default', ['lib/score/oop', 'lib/bluebird', 'lib/css
 
         _initSlides: function(self) {
             self.ul = document.createElement('ul');
-            self.ul.className = 'slides__slides';
+            self.ul.className = self.CLASS_SLIDES;
             self.ul.style.width = self.width * self.config.nodes.length + 'px';
             self.ul.style.display = 'block';
             self.node.appendChild(self.ul);
@@ -62,7 +74,7 @@ define('lib/score/slides/ui/default', ['lib/score/oop', 'lib/bluebird', 'lib/css
             for (var i = 0; i < self.config.nodes.length; i++) {
                 var li = document.createElement('li');
                 li.style.width = self.width + 'px';
-                li.className = 'slides__slides__slide';
+                li.className = self.CLASS_SLIDE;
                 li.appendChild(self.config.nodes[i]);
                 self.slideNodes.push(li);
                 self.ul.appendChild(li);
@@ -71,8 +83,8 @@ define('lib/score/slides/ui/default', ['lib/score/oop', 'lib/bluebird', 'lib/css
 
         _initNextButton: function(self) {
             self.nextButton = document.createElement('button');
-            self.nextButton.innerHTML = 'next';
-            self.nextButton.className = 'slides__button--next';
+            self.nextButton.innerHTML = self.TEXT_NEXT;
+            self.nextButton.className = self.CLASS_NEXT;
             self.nextButton.addEventListener('click', function() {
                 if (!self.slider.isLastSlide()) {
                     self.slider.next();
@@ -83,8 +95,8 @@ define('lib/score/slides/ui/default', ['lib/score/oop', 'lib/bluebird', 'lib/css
 
         _initPreviousButton: function(self) {
             self.prevButton = document.createElement('button');
-            self.prevButton.innerHTML = 'prev';
-            self.prevButton.className = 'slides__button--previous';
+            self.prevButton.innerHTML = self.TEXT_PREV;
+            self.prevButton.className = self.CLASS_PREV;
             self.prevButton.addEventListener('click', function() {
                 if (!self.slider.isFirstSlide()) {
                     self.slider.prev();
@@ -93,7 +105,7 @@ define('lib/score/slides/ui/default', ['lib/score/oop', 'lib/bluebird', 'lib/css
             self.node.appendChild(self.prevButton);
         },
 
-        _windowResized: function(self) {
+        _windowResizeHandler: function(self) {
             self.width = self.node.offsetWidth;
             self.ul.style.width = (4 * self.node.offsetWidth) + 'px';
             for (var i = 0; i < self.slideNodes.length; i++) {
