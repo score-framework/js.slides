@@ -1,0 +1,29 @@
+{
+  "name": "score.slides",
+  "version": "0.2.0",
+  "description": "Slideshow library",
+  "main": "slides.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/score-framework/js.slides.git"
+  },
+  "keywords": [
+    "score",
+    "framework",
+    "slideshow"
+  ],
+  "author": "strg.at <score@strg.at>",
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/score-framework/js.slides/issues"
+  },
+  "homepage": "https://github.com/score-framework/js.slides#readme",
+  "dependencies": {
+      "score.init": "0.0.x",
+      "score.dom": "0.0.x",
+      "bluebird": "3.x.x"
+  }
+}
