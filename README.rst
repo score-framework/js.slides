@@ -96,7 +96,7 @@ If u write your own UI, following is required:
 License
 =======
 
-Copyright © 2015 STRG.AT GmbH, Vienna, Austria
+Copyright © 2015,2016 STRG.AT GmbH, Vienna, Austria
 
 All files in and beneath this directory are part of The SCORE Framework.
 The SCORE Framework and all its parts are free software: you can redistribute

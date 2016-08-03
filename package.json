@@ -1,6 +1,6 @@
 {
   "name": "score.slides",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Slideshow library",
   "main": "slides.js",
   "scripts": {
